@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Escala — Guía local de deporte, turismo y gastronomía</title>
+<meta name="description" content="Guía local que conecta horarios deportivos, lugares turísticos y comida típica de tu destino. Escanea el código QR de tu zona y arma tu plan del día." />
+<meta name="theme-color" content="#0E2230" />
+
+<!-- Open Graph (editar con imagen/URL reales antes de publicar) -->
+<meta property="og:title" content="Escala — Guía local de deporte, turismo y gastronomía" />
+<meta property="og:description" content="Deporte, turismo y comida típica de tu destino, en un solo lugar." />
+<meta property="og:type" content="website" />
+
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400..800&family=Inter:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+
+<link rel="stylesheet" href="../styles/style.css" />
+</head>
+<body>
+
+<a class="skip-link" href="#contenido-principal">Saltar al contenido principal</a>
+
+<!-- ====================== HEADER / NAV ====================== -->
+<header class="site-header" data-header>
+  <div class="wrap site-header__inner">
+    <a href="#inicio" class="brand" aria-label="Escala — inicio">
+      <span class="brand__mark" aria-hidden="true">✦</span>
+      <span class="brand__name">Escala</span>
+    </a>
+
+    <button class="nav-toggle" data-nav-toggle aria-expanded="false" aria-controls="nav-principal">
+      <span class="sr-only">Abrir menú</span>
+      <span class="nav-toggle__bar" aria-hidden="true"></span>
+    </button>
+
+    <nav id="nav-principal" class="site-nav" data-nav aria-label="Navegación principal">
+      <a href="#deportes">Deportes</a>
+      <a href="#turismo">Turismo</a>
+      <a href="#gastronomia">Gastronomía</a>
+      <a href="#mapa">Mapa</a>
+      <a href="#recomendaciones">Recomendaciones</a>
+      <button type="button" class="btn btn--ghost btn--sm" data-open-zone-switcher>
+        Cambiar destino
+      </button>
+    </nav>
+  </div>
+</header>
+
+<main id="contenido-principal">
+
+  <!-- ====================== HERO ====================== -->
+  <section class="hero" id="inicio" aria-labelledby="hero-title">
+    <div class="wrap hero__inner">
+
+      <div class="ticket-stub hero__ticket" data-zone-ticket>
+        <div class="ticket-stub__row ticket-stub__row--top">
+          <span class="eyebrow" data-field="eyebrow">Guía de zona</span>
+          <span class="ticket-stub__code" data-field="codigo">QR · ZONA —</span>
+        </div>
+
+        <h1 class="hero__title" id="hero-title">
+          Deporte, turismo y comida típica.
+          <span class="hero__title-accent">En el orden que los vas a vivir.</span>
+        </h1>
+
+        <p class="hero__lede">
+          Escaneaste el código de tu zona: <strong data-field="zoneName">—</strong>.
+          Esto es lo que hay hoy para ver, visitar y comer cerca de ti.
+        </p>
+
+        <div class="ticket-stub__divider" role="presentation">
+          <span class="ticket-stub__notch ticket-stub__notch--left" aria-hidden="true"></span>
+          <span class="ticket-stub__notch ticket-stub__notch--right" aria-hidden="true"></span>
+        </div>
+
+        <div class="hero__actions">
+          <a href="#deportes" class="btn btn--accent">Ver horarios deportivos</a>
+          <a href="#mapa" class="btn btn--outline">Abrir mapa</a>
+        </div>
+
+        <p class="hero__hint">
+          <button type="button" class="link-btn" data-open-zone-switcher>¿No es tu destino? Cambiar zona manualmente</button>
+        </p>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ====================== SELECTOR DE DESTINO (modal) ====================== -->
+  <div class="zone-switcher" data-zone-switcher hidden>
+    <div class="zone-switcher__panel" role="dialog" aria-modal="true" aria-labelledby="zone-switcher-title">
+      <div class="zone-switcher__head">
+        <h2 id="zone-switcher-title">Elige tu destino</h2>
+        <button type="button" class="icon-btn" data-close-zone-switcher aria-label="Cerrar">✕</button>
+      </div>
+      <p class="zone-switcher__note">
+        Normalmente esta pantalla se salta automáticamente al escanear el QR de tu zona.
+        Úsala solo si necesitas cambiar de destino manualmente.
+      </p>
+      <div class="zone-switcher__list" data-zone-list>
+        <!-- Tarjetas de zona generadas por JS -->
+      </div>
+    </div>
+    <div class="zone-switcher__backdrop" data-close-zone-switcher></div>
+  </div>
+
+  <!-- ====================== EXPERIENCIAS DESTACADAS ====================== -->
+  <section class="section section--tight" aria-labelledby="exp-title">
+    <div class="wrap">
+      <h2 class="section__title" id="exp-title">Planes de hoy</h2>
+      <p class="section__lede">Ideas que conectan lo que ya está pasando en tu zona.</p>
+      <div class="exp-scroller" data-experiencias role="list">
+        <!-- tarjetas generadas por JS -->
+      </div>
+    </div>
+  </section>
+
+  <!-- ====================== DEPORTES ====================== -->
+  <section class="section" id="deportes" aria-labelledby="deportes-title">
+    <div class="wrap">
+      <div class="section__head">
+        <span class="cat-badge cat-badge--deporte">Deporte</span>
+        <h2 class="section__title" id="deportes-title">Horarios deportivos</h2>
+        <p class="section__lede">Partidos y eventos de tu zona, ordenados por fecha.</p>
+      </div>
+
+      <div class="filter-bar" role="group" aria-label="Filtrar eventos deportivos">
+        <button class="chip is-active" data-filter-deporte="todos">Todos</button>
+        <button class="chip" data-filter-deporte="hoy">Hoy</button>
+        <button class="chip" data-filter-deporte="semana">Esta semana</button>
+      </div>
+
+      <ul class="card-grid" data-deportes-list>
+        <!-- tarjetas generadas por JS -->
+      </ul>
+    </div>
+  </section>
+
+  <!-- ====================== TURISMO ====================== -->
+  <section class="section section--alt" id="turismo" aria-labelledby="turismo-title">
+    <div class="wrap">
+      <div class="section__head">
+        <span class="cat-badge cat-badge--turismo">Turismo</span>
+        <h2 class="section__title" id="turismo-title">Lugares turísticos</h2>
+        <p class="section__lede">Puntos de interés cerca de ti, con distancia estimada en tiempo real.</p>
+      </div>
+
+      <div class="filter-bar" role="group" aria-label="Filtrar lugares turísticos">
+        <button class="chip is-active" data-filter-interes="todos">Todos</button>
+        <button class="chip" data-filter-interes="Alto">Interés alto</button>
+        <button class="chip" data-filter-interes="Medio">Interés medio</button>
+        <button class="chip" data-geo-sort>Ordenar por cercanía</button>
+      </div>
+
+      <p class="geo-status" data-geo-status role="status" aria-live="polite"></p>
+
+      <ul class="card-grid" data-turismo-list>
+        <!-- tarjetas generadas por JS -->
+      </ul>
+    </div>
+  </section>
+
+  <!-- ====================== GASTRONOMÍA ====================== -->
+  <section class="section" id="gastronomia" aria-labelledby="gastronomia-title">
+    <div class="wrap">
+      <div class="section__head">
+        <span class="cat-badge cat-badge--comida">Gastronomía</span>
+        <h2 class="section__title" id="gastronomia-title">Comida típica</h2>
+        <p class="section__lede">Platos representativos de la zona.</p>
+      </div>
+
+      <ul class="card-grid card-grid--dishes" data-comida-list>
+        <!-- tarjetas generadas por JS -->
+      </ul>
+    </div>
+  </section>
+
+  <!-- ====================== MAPA ====================== -->
+  <section class="section section--alt" id="mapa" aria-labelledby="mapa-title">
+    <div class="wrap">
+      <div class="section__head">
+        <h2 class="section__title" id="mapa-title">Mapa de la zona</h2>
+        <p class="section__lede">Estadios, lugares turísticos y restaurantes, todo en un mismo mapa.</p>
+      </div>
+
+      <div class="filter-bar" role="group" aria-label="Filtrar capas del mapa">
+        <button class="chip is-active" data-map-filter="deporte">● Deporte</button>
+        <button class="chip is-active" data-map-filter="turismo">● Turismo</button>
+        <button class="chip is-active" data-map-filter="comida">● Gastronomía</button>
+        <button class="chip chip--accent" data-geo-locate>📍 Usar mi ubicación</button>
+      </div>
+
+      <p class="geo-status" data-geo-status-map role="status" aria-live="polite"></p>
+
+      <div class="map-frame">
+        <div id="map" data-map role="application" aria-label="Mapa interactivo de la zona"></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ====================== RECOMENDACIONES ====================== -->
+  <section class="section" id="recomendaciones" aria-labelledby="recos-title">
+    <div class="wrap">
+      <div class="section__head">
+        <h2 class="section__title" id="recos-title">Dónde comer</h2>
+        <p class="section__lede">Restaurantes, mercados y cafeterías sugeridos para probar la comida típica.</p>
+      </div>
+
+      <div class="filter-bar" role="group" aria-label="Filtrar recomendaciones">
+        <button class="chip is-active" data-filter-tipo="todos">Todos</button>
+        <button class="chip" data-filter-tipo="Restaurante">Restaurantes</button>
+        <button class="chip" data-filter-tipo="Cafetería">Cafeterías</button>
+        <button class="chip" data-filter-tipo="Mercado">Mercados</button>
+      </div>
+
+      <ul class="card-grid" data-restaurantes-list>
+        <!-- tarjetas generadas por JS -->
+      </ul>
+    </div>
+  </section>
+
+  <!-- ====================== CONTACTO / INFO ====================== -->
+  <section class="section section--alt" id="contacto" aria-labelledby="contacto-title">
+    <div class="wrap wrap--narrow contact-block">
+      <h2 class="section__title" id="contacto-title">Información adicional</h2>
+      <p>
+        Este es un borrador funcional de la guía. Los datos de deportes, turismo
+        y gastronomía de cada zona son de ejemplo y deben reemplazarse por
+        información real antes de publicar el sitio o imprimir los códigos QR.
+      </p>
+      <p class="contact-block__meta">
+        Zona activa: <strong data-field="zoneNameFooter">—</strong> ·
+        <button type="button" class="link-btn" data-open-zone-switcher>cambiar destino</button>
+      </p>
+    </div>
+  </section>
+
+</main>
+
+<footer class="site-footer">
+  <div class="wrap site-footer__inner">
+    <span>© 2026 Escala — borrador de proyecto.</span>
+    <span>Estructura pensada para agregar más zonas y códigos QR en el futuro.</span>
+  </div>
+</footer>
+
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<script src="../scripts/data.js"></script>
+<script src="../scripts/main.js"></script>
+</body>
+</html>
