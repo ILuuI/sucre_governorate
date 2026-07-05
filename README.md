@@ -1,13 +1,8 @@
-# Escala — Guía local de deporte, turismo y gastronomía (borrador funcional)
+# Escala — Guía local de deporte, turismo y gastronomía
 
 Borrador funcional (HTML + CSS + JS puro, sin frameworks ni build step) de una
 guía local que combina **horarios deportivos**, **lugares turísticos** y
 **comida típica** para tres destinos distintos, activados por **código QR**.
-
-> ⚠️ **Todos los datos de deportes, lugares turísticos, platos, restaurantes y
-> coordenadas GPS en `js/data.js` son de EJEMPLO.** No corresponden a
-> información verificada. Reemplázalos antes de imprimir los QR o publicar
-> el sitio (ver sección "Cómo cargar datos reales").
 
 ---
 
@@ -17,9 +12,9 @@ Cada uno de los tres códigos QR físicos apunta a la misma página, pero con
 un parámetro distinto en la URL:
 
 ```
-https://tu-dominio.com/?zona=1
-https://tu-dominio.com/?zona=2
-https://tu-dominio.com/?zona=3
+https://iluui.github.io/sucre_governorate/?zona=1
+https://iluui.github.io/sucre_governorate/?zona=2
+https://iluui.github.io/sucre_governorate/?zona=3
 ```
 
 En el arranque (`js/main.js → resolveZoneId()`), la página resuelve la zona
@@ -41,14 +36,16 @@ después).
 ## 2. Estructura de archivos
 
 ```
-qr-guia/
+web1/
 ├── index.html          # Estructura semántica de todas las secciones
-├── css/
+├── styles/
 │   └── style.css        # Sistema de diseño (tokens + componentes) responsive
-├── js/
+├── scripts/
 │   ├── data.js           # Datos de las 3 zonas (EDITAR AQUÍ para contenido real)
 │   └── main.js            # Lógica: resolución de zona, render, filtros, geo, mapa
 └── README.md
+└── requirements.txt
+└── .gitignore
 ```
 
 No hay build step. Se puede abrir `index.html` directamente o servirlo con
